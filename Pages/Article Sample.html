@@ -1,0 +1,161 @@
+<!-- Header Image -->
+<div class="header-image">
+    <div class="image-wrapper">
+        <img
+            src="https://raw.githubusercontent.com/MalkarovPark/Celadon/refs/heads/main/Gallery/Captions/MBK.png"
+            alt="<#header_image_alt_text#>">
+    </div>
+</div>
+<!-- Header Image -->
+
+<!-- Article Text -->
+<article class="article-text">
+    
+<p>
+In this material, we’ll explore how to create a module using a set of special terminal utilities provided by <a href="https://github.com/MalkarovPark/Industrial_Builder">Industrial Builder</a>. The build kit is automatically added to the target folder when creating <a href="https://celadon-production-systems.blogspot.com/2025/02/preparing-modules-using.html">external modules</a>, before compiling the program components. Of course, <a href="https://github.com/MalkarovPark/Industrial_Builder/tree/main/Industrial%20Builder/Scripts">this kit</a> is available in the application's project repository. Let’s try creating a module for accessing a force-torque sensor.
+</p>
+
+
+<h2>Chapter</h2>
+
+<p>
+For a robot to sense the objects it interacts with, it needs sensory devices. A force-torque sensor is one such device: it enables the robot not only to pat-pat-pat but also to feel its own touches. The force-torque sensor returns data about the forces and torques acting upon it.
+</p>
+<p>
+So, we’ve got ourselves a sensor. How do we use it? First, identify the manufacturer and find the software. Luckily, we already know – it's <i>ATI</i>. We visit the manufacturer's website and look for the software. Which is absolutely essential, without it, any device is just a mounting or useless decoration.
+</p>
+
+
+<image>
+    <div class="article-image" style="width: 100%;">
+        <div class="image-wrapper">
+            <a href="https://raw.githubusercontent.com/MalkarovPark/Celadon/refs/heads/main/Gallery/Diagrams/RobotToolConnectors.png">
+            <img
+                src="https://raw.githubusercontent.com/MalkarovPark/Celadon/refs/heads/main/Gallery/Diagrams/RobotToolConnectors.png"
+                alt="<#image_alt_text#>">
+            </a>
+        </div>
+    </div>
+    
+</image>
+
+<h2>Video</h2>
+
+<video controls="">
+            <source src="https://chanterelle.us-west.host.bsky.network/xrpc/com.atproto.sync.getBlob?did=did:plc:666riwf5tmxdso6czgkmqn2z&cid=bafkreidqcjokdibc4co6tvvgp336mx3ufndcexwv6ah4ymc3dngmcs7awq" type="video/mp4" />
+</video>
+
+<h2>Code Items</h2>
+
+<div class="code-block">
+    <div class="code-header">
+        <span class="lang-label">swift</span>
+        <div class="code-actions">
+            <button onclick="copyCode(this)">Copy</button>
+        </div>
+    </div>
+<pre>
+<code-block-text>print("n1")
+print("n2")
+print("n3")</code-block-text>
+</pre>
+</div>
+
+<div class="rich-code-block">
+    <div class="rich-code-header">
+        <span class="rich-lang-label">swift</span>
+        <div class="rich-code-actions">
+            <button onclick="richCopyCode(this)">Copy</button>
+        </div>
+    </div>
+<pre>
+<rich-code-block-text>/// Defines the state of a technological operation.
+public enum PerformingState: String, Codable, Equatable, CaseIterable
+{
+    case none = "None"
+    case current = "Current"
+    case processing = "Processing"
+    case completed = "Completed"
+    case error = "Error"
+    
+    /// A color that represents the current performing state.
+    ///
+    /// Use this property to visualize the state in user interfaces.
+    /// Each state is mapped to a distinct color for quick recognition.
+    public var color: Color
+    {
+        switch self
+        {
+        case .none: .gray
+        case .current: .cyan
+        case .processing: .yellow
+        case .completed: .green
+        case .error: .red
+        }
+    }
+}</rich-code-block-text>
+</pre>
+</div>
+
+<h2>Presentation</h2>
+
+<div class="work-view">
+
+  <div class="tabs">
+    <a href="https://indico.particle.mephi.ru/event/470/" class="caption-text" target="_blank" rel="noopener noreferrer">XII International Youth Scientific School-Conference</a>
+    <div class="spacer" style="cursor: auto;"></div>
+    <div class="tab active" data-index="0">Paper</div>
+    <div class="tab" data-index="1">Presentation</div>
+  </div>
+
+  <div class="tab-content active">
+    <iframe allow="autoplay" height="768" src="https://drive.google.com/file/d/1dOH1KBu7ur3Zh8re9IgrVKXnft3Oc_Pa/preview" style="border: none;" width="100%"></iframe>
+  </div>
+
+  <div class="tab-content">
+    <iframe allow="autoplay" height="480" src="https://drive.google.com/file/d/1_fJtIQUC9gTdsbdbrBf_I34obueFHXOz/preview" style="border: none;" width="100%"></iframe>
+  </div>
+
+</div>
+
+<h2>Table</h2>
+
+<div class="table-view">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Task (Name)</th>
+                <th style="width: 18.75%;">Task in foreground</th>
+                <th style="width: 18.75%;">Type</th>
+                <th style="width: 18.75%;">Main entry</th>
+                <th style="width: 18.75%;">TrustLevel</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>robot_server_task</td>
+                <td>T_ROB1</td>
+                <td>SEMISTATIC</td>
+                <td>main</td>
+                <td>No Safety</td>
+            </tr>
+            <tr>
+                <td>tool_server_task</td>
+                <td>T_ROB1</td>
+                <td>SEMISTATIC</td>
+                <td>main</td>
+                <td>No Safety</td>
+            </tr>
+            <tr>
+                <td>T_ROB1</td>
+                <td>–</td>
+                <td>NORMAL</td>
+                <td>main</td>
+                <td>–</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</article>
+<!-- Article Text -->

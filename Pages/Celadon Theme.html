@@ -1,0 +1,1750 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+
+<head>
+  <meta charset='UTF-8'/>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <title><data:view.title.escaped/></title>
+
+  <!-- Google Fonts (Lato) -->
+  <link href='https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&amp;display=swap' rel='stylesheet'/>
+
+  <b:include data='blog' name='all-head-content'/>
+
+  <b:skin><![CDATA[
+
+:root {
+  --bg:#fff;
+  --text:#111;
+  --accent:#39A8A1;
+  --muted:#777;
+
+  --font-body: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'LINESeedSans_Rg', sans-serif;
+}
+
+/* ---------- GLOBAL RESET (Blogger fix) ---------- */
+
+html,
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: var(--font-body) !important;
+  background: linear-gradient(to right, rgb(57, 168, 161), rgb(116, 200, 197));
+  color: var(--text);
+}
+
+/* Force inheritance (prevents Times/serif leaks) */
+*,
+*::before,
+*::after {
+  font-family: inherit;
+}
+
+/* ---------- LINE SEED FONTS ---------- */
+
+@font-face {
+  font-family: 'LINESeedSans_Th';
+  src: url('https://seed.line.me/src/fonts/LINESeedSans_W_Th.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LINESeedSans_Rg';
+  src: url('https://seed.line.me/src/fonts/LINESeedSans_W_Rg.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LINESeedSans_Bd';
+  src: url('https://seed.line.me/src/fonts/LINESeedSans_W_Bd.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LINESeedSans_He';
+  src: url('https://seed.line.me/src/fonts/LINESeedSans_W_He.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LINESeedSans_XBd';
+  src: url('https://seed.line.me/src/fonts/LINESeedSans_W_XBd.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- HEADER ---------- */
+
+/* Link styling */
+header a {
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover effect for links */
+header a:hover {
+  opacity: 0.75;
+}
+
+header {
+  margin-bottom: -20px;
+  font-size: 24px;
+  font-family: LINESeedSans_Bd, sans-serif;
+  color: rgb(255, 255, 255);
+  margin-top: 24px;
+  margin-inline: 24px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.header-nav {
+  display: flex;
+  gap: 12px;
+  font-family: LineSeedSans_Rg;
+  font-size: 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-family: 'LINESeedSans_Bd', sans-serif;
+  font-size: 24px;
+  color: #fff;
+}
+
+header h1 {
+  display: inline-block;
+  margin: 0;
+}
+
+/* ---------- LAYOUT ---------- */
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0px 16px;
+
+  border-radius: 16px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 16px 32px;
+  overflow: hidden;
+  background: var(--bg);
+
+  transition: height 0.4s ease;
+}
+
+/* ---------- GRID ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 16px;
+  margin-block: 16px;
+}
+
+/* Animation */
+#grid {
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+#grid.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+/* ---------- CARD SYSTEM ---------- */
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  display: block;
+  background: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+
+  transform: scale(0.95);
+  opacity: 0;
+
+  transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.25s ease;
+}
+
+.card.visible {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+/* Image */
+.card img.thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.05);
+  transition: transform 0.5s ease;
+}
+
+.card:hover img.thumb {
+  transform: scale(1.15);
+}
+
+/* Overlay */
+.card-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -60px;
+
+  padding: 10px 12px;
+  text-align: center;
+
+  font-size: 18px;
+  font-family: 'LINESeedSans_Rg', sans-serif;
+  color: #fff;
+
+  background: rgba(0,0,0,0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  opacity: 0;
+  transition: all 0.35s ease;
+
+  z-index: 2;
+}
+
+.card:hover .card-body {
+  bottom: 0;
+  opacity: 1;
+}
+
+/* ---------- POST VIEW ---------- */
+
+#postBox {
+  margin-inline: 24px;
+  margin-block: 30px;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.post-back {
+  cursor: pointer;
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+#postBox.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Title */
+.post-title {
+  font-family: 'LINESeedSans_XBd', sans-serif;
+  font-size: 28px;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+/* Body text */
+.post-body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* Paragraphs and lists */
+.post-body p,
+.post-body ul,
+.post-body ol,
+.post-body blockquote {
+  font-family: var(--font-body);
+}
+
+/* Bold text */
+.post-body b,
+.post-body strong {
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+/* Code */
+code {
+  background: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.95em;
+  white-space: pre-wrap;
+}
+
+/* Headings */
+h1 {
+  font-family: 'LINESeedSans_Bd', sans-serif;
+  font-size: 26px;
+}
+
+.post-body h1 {
+  font-family: 'LINESeedSans_XBd', sans-serif;
+}
+
+.post-body h2 {
+  font-family: 'LINESeedSans_Rg', sans-serif;
+  text-align: center;
+  margin-bottom: -10px;
+}
+
+.post-body h3 {
+  font-family: 'LINESeedSans_He', sans-serif;
+}
+
+.post-body h4,
+.post-body h5,
+.post-body h6 {
+  font-family: 'LINESeedSans_Rg', sans-serif;
+}
+
+/* Base Image */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Links */
+.article-image a,
+.header-image a,
+.image-box a {
+  display: block;
+  cursor: zoom-in;
+}
+
+/* Flex Containers */
+.article-image,
+.header-image,
+.image-pair-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Wrappers */
+.image-wrapper {
+  border-radius: 10px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* Header Specific */
+.header-image {
+  margin: 24px 0;
+}
+
+.header-image .image-wrapper {
+  border: 1px solid rgba(208, 208, 208, 0.8);
+  border-radius: 8px;
+}
+
+/* Pair Images */
+.image-pair-container {
+  gap: 5px;
+  margin: 0 auto;
+}
+
+.image-box {
+  flex: 1 1 0%;
+  overflow: hidden;
+}
+
+/* Image Text */
+.image-text {
+  display: block;
+  text-align: center;
+  padding-inline: 80px;
+  font-weight: 350;
+}
+
+/* Links */
+.post-body a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: text-decoration-color 0.2s ease, opacity 0.2s ease;
+}
+
+.post-body a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 2px;
+}
+
+/* Footer */
+footer {
+  padding: 24px;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  font-family: 'LINESeedSans_Th', sans-serif;
+}
+
+/* Lightbox */
+#lightbox-overlay {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display:none;
+  z-index:9999;
+  background: rgba(0,0,0,0);
+  backdrop-filter: blur(0px);
+  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+}
+
+#lightbox-overlay.show {
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+}
+
+#lightbox-overlay img {
+  position: absolute;
+  border-radius: 12px;
+  cursor: zoom-out;
+  transition: all 0.4s ease;
+  max-width: none;
+  max-height: none;
+}
+
+#lightbox-overlay img {
+  position: absolute;
+  border-radius: 12px;
+  cursor: zoom-out;
+  transition: all 0.4s ease;
+  transform-origin: center center;
+}
+
+/* Video */
+video {
+  height: auto;
+  width: 100%;
+  
+  border: 1px solid rgba(208, 208, 208, 0.8);
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: clip;
+  position: relative;
+  margin-block: 20px;
+}
+
+/* Table */
+.table-view {
+  border: 1px solid rgba(208, 208, 208, 0.8);
+  box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: clip;
+  position: relative;
+  margin-block: 20px;
+}
+
+.table-view table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table-view th,
+.table-view td {
+  padding: 8px;
+  text-align: left;
+}
+
+.table-view th {
+  background-color: #f2f2f2;
+}
+
+.table-view table tr td,
+.table-view table tr th {
+  border-left: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+}
+
+.table-view table tr:first-child th {
+  border-top: none;
+}
+
+.table-view table tr td:first-child,
+.table-view table tr th:first-child {
+  border-left: none;
+}
+
+.table-header {
+  background-color: #368589;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-header-button {
+  cursor: pointer;
+}
+
+/* Table of contents */
+#toc-overlay {
+  position: fixed;
+  top: 120px;
+  left: 20px;
+  width: 240px;
+  max-height: calc(100vh - 160px);
+  max-width: 260px;
+  overflow: auto;
+
+  font-family: var(--font-body);
+  z-index: 1000;
+
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  pointer-events: auto;
+}
+
+@media (max-width: 1100px) {
+  #toc-overlay {
+    opacity: 0;
+    transform: translateX(-20px);
+    pointer-events: none;
+  }
+}
+
+#toc-overlay ul {
+  padding: 0;
+  margin: 0;
+}
+
+#toc-overlay li {
+  list-style: none;
+  margin: 0 0 12px 0;
+}
+
+#toc-overlay a {
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: #fff;
+  opacity: 0.85;
+
+  display: block;
+  transition: transform 0.3s ease, color 0.3s ease;
+
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+
+  max-width: 160px;
+}
+
+#toc-overlay a:hover {
+  transform: translateY(-3px);
+  opacity: 0.75;
+}
+
+]]></b:skin>
+</head>
+  
+<!-- Code Item View -->
+<style>
+    .code-block {
+        font-family:
+            ui-monospace,
+            SFMono-Regular,
+            Menlo,
+            Monaco,
+            Consolas,
+            &quot;Liberation Mono&quot;,
+            &quot;Courier New&quot;,
+        monospace;
+        background: #f9f9f9;
+        border: 1px solid rgba(208, 208, 208, 0.8);
+        border-radius: 8px;
+        padding: 0;
+        margin: 1em 0;
+        overflow: auto;
+        box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .code-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f0f0f0;
+        border-bottom: 1px solid #d0d0d0;
+        padding: 6px 12px;
+        font-size: 0.875em;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+          font-family: LineSeedSans_Rg;
+    }
+    
+    .lang-label {
+        color: #555;
+        font-weight: bold;
+    }
+    
+    .code-actions button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.875em;
+        margin-left: 8px;
+        color: #666;
+    }
+    
+    .code-actions button:hover {
+        color: #000;
+    }
+    
+    pre {
+        margin: 0;
+        padding: 12px;
+        overflow-x: auto;
+    }
+    
+    code-block-text {
+        font-size: 0.9em;
+        white-space: pre;
+    }
+    
+    .code-overlay {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        right: 0;
+        height: calc(100% - 40px);
+        background-color: rgba(0, 0, 0, 0);
+        z-index: 5;
+        transition: background-color 0.3s ease;
+        pointer-events: none;
+    }
+    .code-overlay.active {
+        background-color: rgba(0, 0, 0, 0.15);
+        pointer-events: auto;
+    }
+    
+    .code-view {
+        box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: scroll;
+        position: relative;
+        display: flex;
+    }
+</style>
+<script>
+    function copyCode(button) {
+        const code = button.closest(&#39;.code-block&#39;).querySelector(&#39;code-block-text&#39;).innerText;
+        navigator.clipboard.writeText(code).then(() =&gt; {
+            const originalText = button.innerHTML;
+            button.innerHTML = &#39;Copied&#39;;
+            setTimeout(() =&gt; {
+                button.innerHTML = originalText;
+            }, 1500);
+        }).catch(err =&gt; {
+            console.error(&#39;Error&#39;, err);
+        });
+    }
+</script>
+<!-- Code Item View -->
+
+<!-- Rich Code Item View -->
+<style>
+    .rich-code-block {
+        font-family:
+            ui-monospace,
+            SFMono-Regular,
+            Menlo,
+            Monaco,
+            Consolas,
+            &quot;Liberation Mono&quot;,
+            &quot;Courier New&quot;,
+        monospace;
+        background: #f9f9f9;
+        border: 1px solid rgba(208, 208, 208, 0.8);
+        border-radius: 8px;
+        padding: 0;
+        margin: 1em 0;
+        overflow: auto;
+        box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .rich-code-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f0f0f0;
+        border-bottom: 1px solid #d0d0d0;
+        padding: 6px 12px;
+        font-size: 0.875em;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        font-family: LineSeedSans_Rg;
+    }
+    
+    .rich-lang-label {
+        color: #555;
+        font-weight: bold;
+    }
+    
+    .rich-code-actions button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.875em;
+        margin-left: 8px;
+        color: #666;
+    }
+    
+    .rich-code-actions button:hover {
+        color: #000;
+    }
+    
+    pre {
+        margin: 0;
+        padding: 12px;
+        overflow-x: auto;
+    }
+    
+    rich-code-block-text {
+        font-size: 0.9em;
+        white-space: pre;
+    }
+    
+    .rich-code-overlay {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        right: 0;
+        height: calc(100% - 40px);
+        background-color: rgba(0, 0, 0, 0);
+        z-index: 5;
+        transition: background-color 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .rich-code-overlay.active {
+        background-color: rgba(0, 0, 0, 0.15);
+        pointer-events: auto;
+    }
+    
+    .rich-code-view {
+        box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: scroll;
+        position: relative;
+        display: flex;
+    }
+      
+      .swift-string {
+    color: #d12f1b; /* Apple-like red */
+}
+
+.swift-comment {
+    color: #6e7781;
+    font-style: italic;
+}
+
+.swift-number {
+    color: #1c7ed6;
+}
+
+.swift-keyword {
+    color: #7c4dff;
+    font-weight: 600;
+}
+
+.swift-plain {
+    color: #1d1d1f;
+}
+</style>
+<script>
+function richCopyCode(button) {
+        const code = button.closest(&#39;.rich-code-block&#39;).querySelector(&#39;rich-code-block-text&#39;).innerText;
+        navigator.clipboard.writeText(code).then(() =&gt; {
+            const originalText = button.innerHTML;
+            button.innerHTML = &#39;Copied&#39;;
+            setTimeout(() =&gt; {
+                button.innerHTML = originalText;
+            }, 1500);
+        }).catch(err =&gt; {
+            console.error(&#39;Error&#39;, err);
+        });
+    }
+</script>
+<!-- Rich Code Item View -->
+  
+<!--Viewer Script-->
+<style>
+    .work-view {
+        border-radius: 10px;
+        overflow: clip;
+        position: relative;
+        margin-block: 20px;
+        
+        border: 1px solid rgba(208, 208, 208, 0.8);
+        box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tabs {
+        display: flex;
+        cursor: pointer;
+        background-color: #368589;
+        position: relative;
+        z-index: 15;
+    }
+    
+    .tab {
+        padding: 10px;
+        border-bottom: none;
+        background-color: #4EA3A3;
+        color: white;
+        text-align: center;
+        font-family: &#39;LINESeedSans_Rg&#39;;
+        white-space: nowrap;
+    }
+    
+    .tab.active {
+        background-color: #67C2BE;
+        color: white;
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: flex;
+    }
+    
+    .spacer {
+        flex-grow: 1;
+    }
+    
+    .caption-text {
+        padding: 10px;
+        color: white !important;
+        font-family: &#39;LINESeedSans_Rg&#39;;
+    }
+    
+    .caption-text a:hover {
+       text-decoration: underline;
+       text-decoration-color: white !important;
+       text-underline-offset: 2px;
+    }
+    
+    .preview-button {
+        border-bottom: none;
+        background-color: #4EA3A3;
+        color: white;
+        text-align: center;
+        font-family: &#39;LINESeedSans_Rg&#39;;
+        white-space: nowrap;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 10px;
+        width: 26px;
+    }
+    
+    .preview-button img{
+        height: 20px;
+        width: auto;
+        pointer-events: none;
+    }
+    
+    .preview-button:hover {
+        background-color: #67C2BE;
+    }
+    
+    .preview-overlay {
+        position: absolute;
+        top: 40px;
+        right: -50%;
+        height: calc(100% - 40px);
+        width: 50%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: block;
+        z-index: 10;
+        transition: right 0.3s ease, opacity 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+        box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .preview-overlay.active {
+        right: 0;
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .preview-overlay .preview-image-container {
+        position: relative;
+        background-color: white;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .preview-overlay img {
+        max-width: 90%;
+        max-height: 90%;
+    }
+    
+    .code-overlay {
+        position: absolute;
+        top: 40px;
+        left: 0;
+        right: 0;
+        height: calc(100% - 40px);
+        background-color: rgba(0, 0, 0, 0);
+        z-index: 5;
+        transition: background-color 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .code-overlay.active {
+        background-color: rgba(0, 0, 0, 0.15);
+        pointer-events: auto;
+    }
+</style>
+<script>
+    document.addEventListener(&quot;click&quot;, (e) =&gt; {
+
+  const tab = e.target.closest(&quot;.work-view .tab&quot;);
+  if (!tab) return;
+
+  const workView = tab.closest(&quot;.work-view&quot;);
+  if (!workView) return;
+
+  const tabs = workView.querySelectorAll(&quot;.tab&quot;);
+  const contents = workView.querySelectorAll(&quot;.tab-content&quot;);
+
+  const index = Number(tab.dataset.index);
+
+  if (Number.isNaN(index)) return;
+
+  tabs.forEach(t =&gt; t.classList.remove(&quot;active&quot;));
+  contents.forEach(c =&gt; c.classList.remove(&quot;active&quot;));
+
+  tab.classList.add(&quot;active&quot;);
+
+  if (contents[index]) {
+    contents[index].classList.add(&quot;active&quot;);
+  }
+});
+</script>
+<!-- Listing with Preview View -->
+  
+<body>
+
+<!-- GLOBAL LIGHTBOX (MUST BE IN THEME) -->
+<div id='lightbox-overlay'>
+  <img alt='Preview' src=''/>
+</div>
+  
+<div id='toc-overlay'>
+  <!-- <img alt='Preview' src=''/> -->
+</div>
+  
+<!-- <header>
+  <h0><data:blog.title/></h0>
+</header> -->
+<header>
+  <h1>
+    <a data-nav='home' href='/'>
+      <data:blog.title/>
+    </a>
+  </h1>
+  
+  <nav class='header-nav'>
+    <a href='/p/products.html'>Products</a>
+    <a href='/p/science.html'>Science</a>
+    <a href='/p/about.html'>About</a>
+    <!-- <a href='/p/contact.html'>Contact</a> -->
+  </nav>
+</header>
+
+<div class='container'>
+
+  <b:section id='main' showaddelement='yes'>
+    <b:widget id='HTML1' locked='false' title='GridView' type='HTML' version='2' visible='true'>
+      <b:widget-settings>
+        <b:widget-setting name='content'><![CDATA[<div class="grid" id="grid"></div>
+<!-- <div id="loader" style="text-align:center;padding:20px;color:#777;">Loading...</div> -->
+<div id="loader" style="display:none;"></div>
+
+<script>
+
+const rssUrl = 'https://celadon-production-systems.blogspot.com/feeds/posts/default?alt=rss';
+
+function getJsonFeedUrl() {
+  return rssUrl.replace("?alt=rss", "?alt=json-in-script") +
+    "&max-results=150&callback=handleFeed";
+}
+
+let items = [];
+let offset = 0;
+const batchSize = 6;
+let loading = false;
+let finished = false;
+
+const grid = document.getElementById("grid");
+const loader = document.getElementById("loader");
+
+const app = {
+  mode: "grid", // grid | post | page
+  allowGridRender: true
+};
+
+/* ---------- Utilities ---------- */
+
+function setLoader(t) {
+  if (loader) loader.innerText = t;
+}
+
+function slugify(str) {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9а-яё\s-]/gi, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+function getPostSlug(entry) {
+  return slugify(entry.title.$t);
+}
+
+function animateContainerHeight(updateContent) {
+
+  const container = document.querySelector(".container");
+
+  /* 1. Fix current height */
+  const startHeight = container.offsetHeight;
+  container.style.height = startHeight + "px";
+
+  /* 2. Update content (grid → post or reverse) */
+  updateContent();
+
+  /* 3. Wait for layout update */
+  requestAnimationFrame(() => {
+
+    const endHeight = container.scrollHeight;
+
+    /* 4. Animate height */
+    container.style.height = endHeight + "px";
+
+    /* 5. Reset to auto after animation */
+    setTimeout(() => {
+      container.style.height = "auto";
+    }, 400);
+  });
+}
+
+function clearView() {
+
+  const box = document.getElementById("postBox");
+  if (box) {
+    box.classList.remove("visible");
+    box.remove();
+  }
+
+  grid.classList.remove("hidden");
+  grid.style.display = "";
+
+  const toc = document.getElementById("toc-overlay");
+  if (toc) {
+    toc.innerHTML = "";
+    toc.style.display = "none";
+  }
+
+  loader.classList.add("hidden");
+
+  isLightboxOpen = false;
+  currentOriginalImg = null;
+}
+
+/* ---------- Image ---------- */
+
+function extractImage(entry) {
+  const html = entry.content?.$t || entry.summary?.$t || "";
+  const m = html.match(/<img[^>]+src="([^">]+)"/);
+  return m ? m[1] : "https://via.placeholder.com/800x500";
+}
+
+/* ---------- Card ---------- */
+
+function createCard(entry) {
+
+  const a = document.createElement("a");
+  a.className = "card";
+
+  const slug = getPostSlug(entry);
+
+  a.href = "/post/" + slug;
+  a.dataset.slug = slug;
+
+  a.onclick = e => {
+    e.preventDefault();
+    openPost(entry, slug);
+  };
+
+  a.innerHTML = `
+    <img class="thumb" src="${extractImage(entry)}"/>
+    <div class="card-body">${entry.title.$t}</div>
+  `;
+
+  return a;
+}
+
+/* ---------- Grid ---------- */
+
+function renderBatch() {
+  if (!app.allowGridRender) return;
+
+  if (loading || finished) return;
+
+  const batch = items.slice(offset, offset + batchSize);
+
+  if (!items.length) {
+    setLoader("No Posts");
+    return;
+  }
+
+  if (!batch.length) {
+    finished = true;
+    return;
+  }
+
+  loading = true;
+
+  batch.forEach((e, i) => {
+    const card = createCard(e);
+    grid.appendChild(card);
+
+    setTimeout(() => {
+      card.classList.add("visible");
+    }, i * 80);
+  });
+
+  offset += batchSize;
+  loading = false;
+}
+
+/* ---------- Feed ---------- */
+
+function handleFeed(data) {
+  items = data.feed.entry || [];
+
+  if (document.readyState === "complete") {
+  initApp();
+} else {
+  window.addEventListener("load", initApp);
+}
+}
+window.handleFeed = handleFeed;
+
+let appInitialized = false;
+
+function initApp() {
+  if (appInitialized) return;
+  appInitialized = true;
+
+  loadFeed();
+  loadPages();
+}
+
+/* ---------- Load feed ---------- */
+
+function loadFeed() {
+  const s = document.createElement("script");
+  s.src = getJsonFeedUrl();
+  document.body.appendChild(s);
+}
+
+/* ---------- HTML cleanup ---------- */
+
+function cleanHTML(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+
+  div.querySelectorAll("img").forEach(img => {
+    img.loading = "lazy";
+  });
+
+  return div.innerHTML;
+}
+
+/* ---------- Open post ---------- */
+
+function openPost(entry, slug) {
+  
+  clearView();
+
+  animateContainerHeight(() => {
+
+    app.mode = "post";
+    app.allowGridRender = false;
+
+    history.pushState(
+      { mode: "post", slug },
+      "",
+      "/post/" + slug
+    );
+
+    grid.style.display = "none";
+    loader.classList.add("hidden");
+
+    let box = document.getElementById("postBox");
+
+    if (!box) {
+      box = document.createElement("div");
+      box.id = "postBox";
+      document.querySelector(".container").appendChild(box);
+    }
+
+    box.innerHTML = `
+      <h1>${entry.title.$t}</h1>
+      <div class="post-body">
+        ${cleanHTML(entry.content?.$t || "")}
+      </div>
+    `;
+
+    /* Hide grid with animation */
+    grid.classList.add("hidden");
+
+    /* Show post after animation starts */
+    requestAnimationFrame(() => {
+      box.classList.add("visible");
+    });
+    
+    buildToC();
+
+    requestAnimationFrame(() => {
+        initRichCodeBlocks(box);
+    });
+  });
+}
+
+/* ---------- Table of contents ---------- */
+
+function buildToC() {
+
+  const toc = document.getElementById("toc-overlay");
+  if (!toc) return;
+
+  const headers = document.querySelectorAll("#postBox .post-body h2");
+
+  toc.innerHTML = "";
+
+  if (!headers.length) {
+    toc.style.display = "none";
+    return;
+  }
+
+  toc.style.display = "block";
+
+  const ul = document.createElement("ul");
+
+  headers.forEach((h2, i) => {
+
+    const id = "toc-h2-" + i;
+    h2.id = id;
+
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+
+    //a.href = "#" + id;
+    //a.textContent = h2.textContent;
+    
+    a.href = "javascript:void(0)";
+    a.textContent = h2.textContent;
+    
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+    
+      const target = document.getElementById(id);
+      if (!target) return;
+    
+      target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+    });
+
+    li.appendChild(a);
+    ul.appendChild(li);
+  });
+
+  toc.appendChild(ul);
+}
+
+/* ---------- Back to grid ---------- */
+
+function backToGrid() {
+
+  //clearView(); //if (app.mode === "grid") return;
+
+  app.mode = "grid";
+  app.allowGridRender = true;
+
+  history.pushState({ mode: "grid" }, "", "/");
+
+  const box = document.getElementById("postBox");
+
+  if (box) {
+    box.classList.remove("visible");
+    
+    box.addEventListener("transitionend", () => {
+      if (box && box.parentNode) box.remove();
+    }, { once: true });
+  }
+
+  /* Show grid */
+  grid.classList.remove("hidden");
+  grid.style.display = "";
+
+  /* Clear table of contents */
+  const toc = document.getElementById("toc-overlay");
+  if (toc) {
+    toc.innerHTML = "";
+    toc.style.display = "none";
+  }
+
+  // reset animation state
+  const cards = grid.querySelectorAll(".card");
+  cards.forEach(c => c.classList.remove("visible"));
+
+  // force reflow
+  void grid.offsetWidth;
+
+  /* Re-render if empty */
+  offset = 0;
+  finished = false;
+  
+  grid.innerHTML = "";
+  
+  requestAnimationFrame(() => {
+    renderBatch();
+  });
+}
+
+/* ---------- Routing ---------- */
+
+function getEntryBySlug(slug) {
+  return items.find(e => getPostSlug(e) === slug);
+}
+
+function handleRoute() {
+
+  const path = window.location.pathname;
+
+  /* HOME */
+  if (path === "/") {
+    backToGrid();
+    return;
+  }
+
+  /* POSTS */
+  if (path.startsWith("/post/")) {
+
+    const slug = path.replace("/post/", "");
+    const entry = getEntryBySlug(slug);
+
+    if (entry) openPost(entry, slug);
+
+    return;
+  }
+
+  /* PAGES */
+  if (path.startsWith("/p/")) {
+
+    const slug = path.replace("/p/", "").replace(".html", "");
+    const page = getPageBySlug(slug);
+
+    if (page) openPage(page);
+
+    return;
+  }
+}
+
+/* ---------- Browser navigation ---------- */
+
+window.addEventListener("popstate", () => {
+  handleRoute();
+});
+
+/* ---------- Infinite scroll ---------- */
+
+window.addEventListener("scroll", () => {
+  if (finished || loading || app.mode !== "grid") return;
+
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 800) {
+    renderBatch();
+  }
+});
+
+/* ---------- Init ---------- */
+
+let pages = [];
+
+function loadPages() {
+  const s = document.createElement("script");
+  s.src =
+    "https://celadon-production-systems.blogspot.com/feeds/pages/default?alt=json-in-script&max-results=50&callback=handlePages";
+  document.body.appendChild(s);
+}
+
+function handlePages(data) {
+  pages = data.feed.entry || [];
+  handleRoute();
+}
+window.handlePages = handlePages;
+
+window.addEventListener("load", () => {
+  loadFeed();
+  loadPages();
+});
+
+function getPageSlug(page) {
+  return slugify(page.title.$t);
+}
+
+function getPageBySlug(slug) {
+  return pages.find(p => getPageSlug(p) === slug);
+}
+
+function openPage(page) {
+  
+  clearView();
+
+  app.mode = "page";
+  app.allowGridRender = false;
+
+  history.pushState(
+    { mode: "page", slug: getPageSlug(page) },
+    "",
+    "/p/" + getPageSlug(page) + ".html"
+  );
+
+  grid.style.display = "none";
+  loader.classList.add("hidden");
+
+  let box = document.getElementById("postBox");
+
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "postBox";
+    document.querySelector(".container").appendChild(box);
+  }
+
+  box.innerHTML = `
+    <h1>${page.title.$t}</h1>
+    <div class="post-body">
+      ${cleanHTML(page.content?.$t || "")}
+    </div>
+  `;
+
+  grid.classList.add("hidden");
+
+  requestAnimationFrame(() => {
+    box.classList.add("visible");
+  });
+}
+
+/* ---------- Link interception ---------- */
+
+document.addEventListener("click", (e) => {
+
+  const a = e.target.closest("a");
+  if (!a) return;
+
+  const href = a.getAttribute("href");
+
+  /* Home link */
+  if (href === "/") {
+    e.preventDefault();
+    backToGrid();
+    return;
+  }
+
+  /* Do not intercept pages */
+  if (href && href.startsWith("/p/")) return;
+
+  const img = e.target.closest("img");
+  if (!img) return;
+
+  if (img.closest(".header-image")) return;
+
+  const allowed = img.closest(".post-body, .image-pair-container");
+  if (!allowed) return;
+
+  e.preventDefault();
+  openLightbox(img);
+});
+
+/* ---------- Lightbox ---------- */
+
+let currentOriginalImg = null;
+let isLightboxOpen = false;
+
+/* Open lightbox */
+function openLightbox(img) {
+
+  if (isLightboxOpen) return;
+  isLightboxOpen = true;
+
+  const overlay = document.getElementById("lightbox-overlay");
+  const lightboxImg = overlay.querySelector("img");
+
+  currentOriginalImg = img;
+
+  img.style.opacity = "0";
+
+  const rect = img.getBoundingClientRect();
+
+  lightboxImg.src = img.src;
+  lightboxImg.style.width = rect.width + "px";
+  lightboxImg.style.height = rect.height + "px";
+  lightboxImg.style.top = rect.top + "px";
+  lightboxImg.style.left = rect.left + "px";
+
+  overlay.style.display = "block";
+
+  requestAnimationFrame(() => {
+    overlay.classList.add("show");
+    applyLightboxSize(lightboxImg);
+  });
+}
+
+/* Close lightbox */
+function closeLightbox() {
+
+  if (!isLightboxOpen) return;
+
+  const overlay = document.getElementById("lightbox-overlay");
+  const img = overlay.querySelector("img");
+
+  if (!currentOriginalImg) {
+    overlay.style.display = "none";
+    overlay.classList.remove("show");
+    isLightboxOpen = false;
+    return;
+  }
+
+  const rect = currentOriginalImg.getBoundingClientRect();
+
+  img.style.width = rect.width + "px";
+  img.style.height = rect.height + "px";
+  img.style.top = rect.top + "px";
+  img.style.left = rect.left + "px";
+
+  overlay.classList.remove("show");
+
+  img.addEventListener("transitionend", function handler() {
+    overlay.style.display = "none";
+    img.removeEventListener("transitionend", handler);
+
+    if (currentOriginalImg) {
+      currentOriginalImg.style.opacity = "1";
+    }
+
+    currentOriginalImg = null;
+    isLightboxOpen = false;
+  });
+}
+
+/* Responsive size calculation */
+function applyLightboxSize(img) {
+
+  if (!img || !img.src) return;
+
+  const ratio = img.naturalWidth / img.naturalHeight;
+
+  let w = window.innerWidth * 0.9;
+  let h = w / ratio;
+
+  if (h > window.innerHeight * 0.9) {
+    h = window.innerHeight * 0.9;
+    w = h * ratio;
+  }
+
+  img.style.width = w + "px";
+  img.style.height = h + "px";
+  img.style.top = (window.innerHeight - h) / 2 + "px";
+  img.style.left = (window.innerWidth - w) / 2 + "px";
+}
+
+/* Close on overlay click */
+window.addEventListener("load", () => {
+
+  const overlay = document.getElementById("lightbox-overlay");
+  const lightboxImg = overlay.querySelector("img");
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay || e.target === lightboxImg) {
+      closeLightbox();
+    }
+  });
+});
+
+/* Resize handler */
+window.addEventListener("resize", () => {
+
+  const overlay = document.getElementById("lightbox-overlay");
+
+  if (!overlay || overlay.style.display !== "block") return;
+
+  const img = overlay.querySelector("img");
+  applyLightboxSize(img);
+});
+
+/* ---------- Rich Code Item ---------- */
+function initRichCodeBlocks(root = document) {
+    if (!root) return;
+
+    const blocks = root.querySelectorAll("rich-code-block-text");
+
+    blocks.forEach(el => {
+        if (el.dataset.highlighted === "true") return;
+
+        const raw = el.textContent;
+        el.innerHTML = highlightSwift(raw);
+        el.dataset.highlighted = "true";
+    });
+}
+
+function highlightSwift(code) {
+
+    const keywords = new Set([
+        "print", "let", "var", "func", "if", "else",
+        "for", "while", "return", "class", "struct",
+        "enum", "import", "guard", "in", "do", "try",
+        "catch", "switch", "case", "default"
+    ]);
+
+    let i = 0;
+    let out = "";
+
+    const isAlpha = c => /[a-zA-Z_]/.test(c);
+    const isNum = c => /[0-9]/.test(c);
+
+    while (i < code.length) {
+        const c = code[i];
+
+        // "//" comment
+        if (c === "/" && code[i + 1] === "/") {
+            let start = i;
+            i += 2;
+            while (i < code.length && code[i] !== "\n") i++;
+            out += `<span class="swift-comment">${escapeHtml(code.slice(start, i))}</span>`;
+            continue;
+        }
+
+        // "..." string
+        if (c === '"') {
+            let start = i;
+            i++;
+            while (i < code.length && !(code[i] === '"' && code[i - 1] !== "\\")) {
+                i++;
+            }
+            i++; // закрывающая "
+            out += `<span class="swift-string">${escapeHtml(code.slice(start, i))}</span>`;
+            continue;
+        }
+
+        // number
+        if (isNum(c)) {
+            let start = i;
+            while (i < code.length && /[0-9.]/.test(code[i])) i++;
+            out += `<span class="swift-number">${code.slice(start, i)}</span>`;
+            continue;
+        }
+
+        // keyword
+        if (isAlpha(c)) {
+            let start = i;
+            while (i < code.length && /[a-zA-Z0-9_]/.test(code[i])) i++;
+            let word = code.slice(start, i);
+
+            if (keywords.has(word)) {
+                out += `<span class="swift-keyword">${word}</span>`;
+            } else {
+                out += word;
+            }
+            continue;
+        }
+
+        // other
+        out += c;
+        i++;
+    }
+
+    return out;
+}
+
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+
+</script>]]></b:widget-setting>
+      </b:widget-settings>
+      <b:includable id='main'>
+    <div class='widget-content'>
+      <data:content/>
+    </div>
+  </b:includable>
+    </b:widget>
+  </b:section>
+</div>
+
+<footer>
+  Celadon Production Systems &#183; <span id='year'/>
+</footer>
+
+<script>
+  document.getElementById(&quot;year&quot;).textContent = new Date().getFullYear();
+</script>
+
+</body>
+
+</html>
