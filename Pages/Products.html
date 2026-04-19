@@ -1,0 +1,146 @@
+<!-- Style -->
+<style>
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    width: 100%;
+      
+      padding-bottom: 10px;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+
+    /*background: $(card-background);*/
+    border-radius: 10px;
+    overflow: hidden;
+
+    /*transform: translateY(0);
+    box-shadow: 0 0 0 rgba(0,0,0,0);*/
+
+    /*transition:
+        transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);*/
+
+    will-change: transform, box-shadow;
+}
+
+.tile-image {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+}
+
+.tile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    
+    transition:
+        transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tile:hover .tile-image img {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.12));
+}
+
+.tile-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 12px 28px rgba(0,0,0,0);
+    transition: box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+}
+
+.tile:hover .tile-image::after {
+    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+.tile-title {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 16px 4px;
+      text-align: left;
+      
+      font-family: 'LINESeedSans_Rg', sans-serif;
+      font-size: 16px;
+}
+
+.tile-desc {
+    font-size: 14px;
+    padding: 0 16px 16px;
+    opacity: 0.85;
+}
+
+.tile {
+    position: relative;
+}
+
+.tile-link-overlay {
+    position: absolute;
+    inset: 0;
+
+    z-index: 10;
+
+    display: block;
+}
+</style>
+<!-- Style -->
+
+<!-- Main Text -->
+<article class="tiles">
+
+    <div class="tile" style="background: linear-gradient(to right, #4FC8C0 -200%, #48A8A2 300%); color: white;">
+        <a class="tile-link-overlay" href="https://github.com/MalkarovPark/IndustrialKit" aria-label="IndustrialKit"></a>
+        <div class="tile-image" style="padding: 25px;">
+            <img src="https://raw.githubusercontent.com/MalkarovPark/Celadon/refs/heads/main/Gallery/Icons/IndustrialKit.png">
+        </div>
+        <div class="tile-title">
+            IndustrialKit
+        </div>
+        <div class="tile-desc">
+            The open source software platform for creating applications that enable the design and control of automated means of production.
+        </div>
+    </div>
+
+    <div class="tile" style="background: linear-gradient(to right, #368589 -200%, #67C2BE 300%); color: white;">
+          <a class="tile-link-overlay" href="https://github.com/MalkarovPark/Robotic_Complex_Workspace" aria-label="Robotic Complex Workspace"></a>
+        <div class="tile-image" style="padding: 50px;">
+            <img src="https://raw.githubusercontent.com/MalkarovPark/Celadon/refs/heads/main/Gallery/Icons/RCWorkspace-iOS.png">
+        </div>
+        <div class="tile-title">
+            Robotic Complex Workspace
+        </div>
+        <div class="tile-desc">
+            The universal industrial complex projecting and control system.
+        </div>
+    </div>
+
+    <div class="tile" style="background: linear-gradient(to right, #767acc -200%, #abaaff 300%); color: white;">
+          <a class="tile-link-overlay" href="https://github.com/MalkarovPark/Industrial_Builder" aria-label="Industrial Builder"></a>
+        <div class="tile-image" style="padding: 50px;">
+            <img src="https://raw.githubusercontent.com/MalkarovPark/Celadon/refs/heads/main/Gallery/Icons/IndustrialBuilder-iOS.png">
+        </div>
+        <div class="tile-title">
+            Industrial Builder
+        </div>
+        <div class="tile-desc">
+            The environment of standard template constructs development and using for building means of production.
+        </div>
+    </div>
+
+</article>
+<!-- Main Text -->
