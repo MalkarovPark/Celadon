@@ -286,6 +286,10 @@ header h1 {
   font-family: var(--font-body);
 }
 
+.post-body ul {
+    text-align: left;
+}
+
 /* Bold text */
 .post-body b,
 .post-body strong {
@@ -818,6 +822,9 @@ function richCopyCode(button) {
         
         border: 1px solid rgba(208, 208, 208, 0.8);
         box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+          
+          content-visibility: auto;
+          contain-intrinsic-size: 800px;
     }
     
     .tabs {
@@ -857,7 +864,7 @@ function richCopyCode(button) {
     
     .caption-text {
         padding: 10px;
-        color: white !important;
+          --accent: white;
         font-family: &#39;LINESeedSans_Rg&#39;;
     }
     
@@ -1248,14 +1255,14 @@ function openPost(entry, slug) {
 
     /* Hide grid with animation */
     grid.classList.add("hidden");
-
+    
     /* Show post after animation starts */
     requestAnimationFrame(() => {
       box.classList.add("visible");
     });
     
     buildToC();
-
+    
     requestAnimationFrame(() => {
         initRichCodeBlocks(box);
     });
@@ -1474,7 +1481,7 @@ function openPage(page) {
     document.querySelector(".container").appendChild(box);
   }
 
-  box.innerHTML = `
+  /*box.innerHTML = `
     <h1>${page.title.$t}</h1>
     <div class="post-body">
       ${cleanHTML(page.content?.$t || "")}
@@ -1485,7 +1492,28 @@ function openPage(page) {
 
   requestAnimationFrame(() => {
     box.classList.add("visible");
-  });
+  });*/
+  
+  box.innerHTML = `
+      <h1>${page.title.$t}</h1>
+      <div class="post-body">
+        ${cleanHTML(page.content?.$t || "")}
+      </div>
+    `;
+
+    /* Hide grid with animation */
+    grid.classList.add("hidden");
+    
+    /* Show post after animation starts */
+    requestAnimationFrame(() => {
+      box.classList.add("visible");
+    });
+    
+    buildToC();
+    
+    requestAnimationFrame(() => {
+        initRichCodeBlocks(box);
+    });
 }
 
 /* ---------- Link interception ---------- */
