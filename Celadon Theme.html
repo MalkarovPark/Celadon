@@ -355,6 +355,7 @@ img {
   display: flex;
   justify-content: center;
   margin: 0 auto;
+  margin-block: 20px;
 }
 
 /* Wrappers */
@@ -391,6 +392,7 @@ img {
   text-align: center;
   padding-inline: 80px;
   font-weight: 350;
+  margin-top: -20px;
 }
 
 /* Links */
@@ -602,6 +604,7 @@ video {
         margin: 1em 0;
         overflow: auto;
         box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+          margin-block: 25px;
     }
     
     .code-header {
@@ -639,6 +642,7 @@ video {
         margin: 0;
         padding: 12px;
         overflow-x: auto;
+          max-height: 600px;
     }
     
     code-block-text {
@@ -705,6 +709,7 @@ video {
         margin: 1em 0;
         overflow: auto;
         box-shadow: 0 0px 8px rgba(0, 0, 0, 0.1);
+          margin-block: 25px;
     }
     
     .rich-code-header {
@@ -736,12 +741,6 @@ video {
     
     .rich-code-actions button:hover {
         color: #000;
-    }
-    
-    pre {
-        margin: 0;
-        padding: 12px;
-        overflow-x: auto;
     }
     
     rich-code-block-text {
@@ -1032,6 +1031,9 @@ const batchSize = 6;
 let loading = false;
 let finished = false;
 
+let currentOriginalImg = null;
+let isLightboxOpen = false;
+
 const grid = document.getElementById("grid");
 const loader = document.getElementById("loader");
 
@@ -1176,26 +1178,24 @@ function renderBatch() {
 
 /* ---------- Feed ---------- */
 
-function handleFeed(data) {
-  items = data.feed.entry || [];
-
-  if (document.readyState === "complete") {
-  initApp();
-} else {
-  window.addEventListener("load", initApp);
-}
-}
-window.handleFeed = handleFeed;
-
+let feedLoaded = false;
+let pagesLoaded = false;
 let appInitialized = false;
 
 function initApp() {
-  if (appInitialized) return;
-  appInitialized = true;
+  if (appInitialized || !feedLoaded || !pagesLoaded) return;
 
-  loadFeed();
-  loadPages();
+  appInitialized = true;
+  handleRoute();
 }
+
+function handleFeed(data) {
+  items = data.feed.entry || [];
+  feedLoaded = true;
+  initApp();
+}
+
+window.handleFeed = handleFeed;
 
 /* ---------- Load feed ---------- */
 
@@ -1220,8 +1220,8 @@ function cleanHTML(html) {
 
 /* ---------- Open post ---------- */
 
-function openPost(entry, slug) {
-  
+function openPost(entry, slug, navigate = true) {
+
   clearView();
 
   animateContainerHeight(() => {
@@ -1229,11 +1229,13 @@ function openPost(entry, slug) {
     app.mode = "post";
     app.allowGridRender = false;
 
-    history.pushState(
-      { mode: "post", slug },
-      "",
-      "/post/" + slug
-    );
+    if (navigate) {
+      history.pushState(
+        { mode: "post", slug },
+        "",
+        "/post/" + slug
+      );
+    }
 
     grid.style.display = "none";
     loader.classList.add("hidden");
@@ -1255,16 +1257,16 @@ function openPost(entry, slug) {
 
     /* Hide grid with animation */
     grid.classList.add("hidden");
-    
+
     /* Show post after animation starts */
     requestAnimationFrame(() => {
       box.classList.add("visible");
     });
-    
+
     buildToC();
-    
+
     requestAnimationFrame(() => {
-        initRichCodeBlocks(box);
+      initRichCodeBlocks(box);
     });
   });
 }
@@ -1297,22 +1299,19 @@ function buildToC() {
     const li = document.createElement("li");
     const a = document.createElement("a");
 
-    //a.href = "#" + id;
-    //a.textContent = h2.textContent;
-    
     a.href = "javascript:void(0)";
     a.textContent = h2.textContent;
-    
+
     a.addEventListener("click", (e) => {
       e.preventDefault();
-    
+
       const target = document.getElementById(id);
       if (!target) return;
-    
+
       target.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
+        behavior: "smooth",
+        block: "start"
+      });
     });
 
     li.appendChild(a);
@@ -1324,20 +1323,20 @@ function buildToC() {
 
 /* ---------- Back to grid ---------- */
 
-function backToGrid() {
-
-  //clearView(); //if (app.mode === "grid") return;
+function backToGrid(navigate = true) {
 
   app.mode = "grid";
   app.allowGridRender = true;
 
-  history.pushState({ mode: "grid" }, "", "/");
+  if (navigate) {
+    history.pushState({ mode: "grid" }, "", "/");
+  }
 
   const box = document.getElementById("postBox");
 
   if (box) {
     box.classList.remove("visible");
-    
+
     box.addEventListener("transitionend", () => {
       if (box && box.parentNode) box.remove();
     }, { once: true });
@@ -1364,9 +1363,9 @@ function backToGrid() {
   /* Re-render if empty */
   offset = 0;
   finished = false;
-  
+
   grid.innerHTML = "";
-  
+
   requestAnimationFrame(() => {
     renderBatch();
   });
@@ -1384,7 +1383,7 @@ function handleRoute() {
 
   /* HOME */
   if (path === "/") {
-    backToGrid();
+    backToGrid(false);
     return;
   }
 
@@ -1394,7 +1393,7 @@ function handleRoute() {
     const slug = path.replace("/post/", "");
     const entry = getEntryBySlug(slug);
 
-    if (entry) openPost(entry, slug);
+    if (entry) openPost(entry, slug, false);
 
     return;
   }
@@ -1405,7 +1404,7 @@ function handleRoute() {
     const slug = path.replace("/p/", "").replace(".html", "");
     const page = getPageBySlug(slug);
 
-    if (page) openPage(page);
+    if (page) openPage(page, false);
 
     return;
   }
@@ -1427,7 +1426,7 @@ window.addEventListener("scroll", () => {
   }
 });
 
-/* ---------- Init ---------- */
+/* ---------- Pages ---------- */
 
 let pages = [];
 
@@ -1440,13 +1439,26 @@ function loadPages() {
 
 function handlePages(data) {
   pages = data.feed.entry || [];
-  handleRoute();
+  pagesLoaded = true;
+  initApp();
 }
+
 window.handlePages = handlePages;
+
+/* ---------- Initial loading ---------- */
 
 window.addEventListener("load", () => {
   loadFeed();
   loadPages();
+
+  const overlay = document.getElementById("lightbox-overlay");
+  const lightboxImg = overlay.querySelector("img");
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay || e.target === lightboxImg) {
+      closeLightbox();
+    }
+  });
 });
 
 function getPageSlug(page) {
@@ -1457,18 +1469,20 @@ function getPageBySlug(slug) {
   return pages.find(p => getPageSlug(p) === slug);
 }
 
-function openPage(page) {
-  
+function openPage(page, navigate = true) {
+
   clearView();
 
   app.mode = "page";
   app.allowGridRender = false;
 
-  history.pushState(
-    { mode: "page", slug: getPageSlug(page) },
-    "",
-    "/p/" + getPageSlug(page) + ".html"
-  );
+  if (navigate) {
+    history.pushState(
+      { mode: "page", slug: getPageSlug(page) },
+      "",
+      "/p/" + getPageSlug(page) + ".html"
+    );
+  }
 
   grid.style.display = "none";
   loader.classList.add("hidden");
@@ -1481,39 +1495,26 @@ function openPage(page) {
     document.querySelector(".container").appendChild(box);
   }
 
-  /*box.innerHTML = `
+  box.innerHTML = `
     <h1>${page.title.$t}</h1>
     <div class="post-body">
       ${cleanHTML(page.content?.$t || "")}
     </div>
   `;
 
+  /* Hide grid with animation */
   grid.classList.add("hidden");
 
+  /* Show post after animation starts */
   requestAnimationFrame(() => {
     box.classList.add("visible");
-  });*/
-  
-  box.innerHTML = `
-      <h1>${page.title.$t}</h1>
-      <div class="post-body">
-        ${cleanHTML(page.content?.$t || "")}
-      </div>
-    `;
+  });
 
-    /* Hide grid with animation */
-    grid.classList.add("hidden");
-    
-    /* Show post after animation starts */
-    requestAnimationFrame(() => {
-      box.classList.add("visible");
-    });
-    
-    buildToC();
-    
-    requestAnimationFrame(() => {
-        initRichCodeBlocks(box);
-    });
+  buildToC();
+
+  requestAnimationFrame(() => {
+    initRichCodeBlocks(box);
+  });
 }
 
 /* ---------- Link interception ---------- */
@@ -1548,9 +1549,6 @@ document.addEventListener("click", (e) => {
 });
 
 /* ---------- Lightbox ---------- */
-
-let currentOriginalImg = null;
-let isLightboxOpen = false;
 
 /* Open lightbox */
 function openLightbox(img) {
@@ -1639,19 +1637,6 @@ function applyLightboxSize(img) {
   img.style.left = (window.innerWidth - w) / 2 + "px";
 }
 
-/* Close on overlay click */
-window.addEventListener("load", () => {
-
-  const overlay = document.getElementById("lightbox-overlay");
-  const lightboxImg = overlay.querySelector("img");
-
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay || e.target === lightboxImg) {
-      closeLightbox();
-    }
-  });
-});
-
 /* Resize handler */
 window.addEventListener("resize", () => {
 
@@ -1664,94 +1649,95 @@ window.addEventListener("resize", () => {
 });
 
 /* ---------- Rich Code Item ---------- */
+
 function initRichCodeBlocks(root = document) {
-    if (!root) return;
+  if (!root) return;
 
-    const blocks = root.querySelectorAll("rich-code-block-text");
+  const blocks = root.querySelectorAll("rich-code-block-text");
 
-    blocks.forEach(el => {
-        if (el.dataset.highlighted === "true") return;
+  blocks.forEach(el => {
+    if (el.dataset.highlighted === "true") return;
 
-        const raw = el.textContent;
-        el.innerHTML = highlightSwift(raw);
-        el.dataset.highlighted = "true";
-    });
+    const raw = el.textContent;
+    el.innerHTML = highlightSwift(raw);
+    el.dataset.highlighted = "true";
+  });
 }
 
 function highlightSwift(code) {
 
-    const keywords = new Set([
-        "print", "let", "var", "func", "if", "else",
-        "for", "while", "return", "class", "struct",
-        "enum", "import", "guard", "in", "do", "try",
-        "catch", "switch", "case", "default"
-    ]);
+  const keywords = new Set([
+    "print", "let", "var", "func", "if", "else",
+    "for", "while", "return", "class", "struct",
+    "enum", "import", "guard", "in", "do", "try",
+    "catch", "switch", "case", "default"
+  ]);
 
-    let i = 0;
-    let out = "";
+  let i = 0;
+  let out = "";
 
-    const isAlpha = c => /[a-zA-Z_]/.test(c);
-    const isNum = c => /[0-9]/.test(c);
+  const isAlpha = c => /[a-zA-Z_]/.test(c);
+  const isNum = c => /[0-9]/.test(c);
 
-    while (i < code.length) {
-        const c = code[i];
+  while (i < code.length) {
+    const c = code[i];
 
-        // "//" comment
-        if (c === "/" && code[i + 1] === "/") {
-            let start = i;
-            i += 2;
-            while (i < code.length && code[i] !== "\n") i++;
-            out += `<span class="swift-comment">${escapeHtml(code.slice(start, i))}</span>`;
-            continue;
-        }
-
-        // "..." string
-        if (c === '"') {
-            let start = i;
-            i++;
-            while (i < code.length && !(code[i] === '"' && code[i - 1] !== "\\")) {
-                i++;
-            }
-            i++; // закрывающая "
-            out += `<span class="swift-string">${escapeHtml(code.slice(start, i))}</span>`;
-            continue;
-        }
-
-        // number
-        if (isNum(c)) {
-            let start = i;
-            while (i < code.length && /[0-9.]/.test(code[i])) i++;
-            out += `<span class="swift-number">${code.slice(start, i)}</span>`;
-            continue;
-        }
-
-        // keyword
-        if (isAlpha(c)) {
-            let start = i;
-            while (i < code.length && /[a-zA-Z0-9_]/.test(code[i])) i++;
-            let word = code.slice(start, i);
-
-            if (keywords.has(word)) {
-                out += `<span class="swift-keyword">${word}</span>`;
-            } else {
-                out += word;
-            }
-            continue;
-        }
-
-        // other
-        out += c;
-        i++;
+    // "//" comment
+    if (c === "/" && code[i + 1] === "/") {
+      let start = i;
+      i += 2;
+      while (i < code.length && code[i] !== "\n") i++;
+      out += `<span class="swift-comment">${escapeHtml(code.slice(start, i))}</span>`;
+      continue;
     }
 
-    return out;
+    // "..." string
+    if (c === '"') {
+      let start = i;
+      i++;
+      while (i < code.length && !(code[i] === '"' && code[i - 1] !== "\\")) {
+        i++;
+      }
+      i++;
+      out += `<span class="swift-string">${escapeHtml(code.slice(start, i))}</span>`;
+      continue;
+    }
+
+    // number
+    if (isNum(c)) {
+      let start = i;
+      while (i < code.length && /[0-9.]/.test(code[i])) i++;
+      out += `<span class="swift-number">${code.slice(start, i)}</span>`;
+      continue;
+    }
+
+    // keyword
+    if (isAlpha(c)) {
+      let start = i;
+      while (i < code.length && /[a-zA-Z0-9_]/.test(code[i])) i++;
+      let word = code.slice(start, i);
+
+      if (keywords.has(word)) {
+        out += `<span class="swift-keyword">${word}</span>`;
+      } else {
+        out += word;
+      }
+      continue;
+    }
+
+    // other
+    out += c;
+    i++;
+  }
+
+  return out;
 }
 
 function escapeHtml(str) {
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
 
 </script>]]></b:widget-setting>

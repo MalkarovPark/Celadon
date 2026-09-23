@@ -15,16 +15,8 @@
     text-decoration: none;
     color: inherit;
 
-    /*background: $(card-background);*/
     border-radius: 10px;
     overflow: hidden;
-
-    /*transform: translateY(0);
-    box-shadow: 0 0 0 rgba(0,0,0,0);*/
-
-    /*transition:
-        transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);*/
 
     will-change: transform, box-shadow;
 }
@@ -33,12 +25,14 @@
     aspect-ratio: 1 / 1;
     width: 100%;
     overflow: hidden;
-
+    
     display: flex;
     align-items: center;
     justify-content: center;
-
+    
     box-sizing: border-box;
+      
+      filter: drop-shadow(0 12px 28px rgba(0,0,0,0.06));
 }
 
 .tile-image img {
@@ -73,10 +67,16 @@
     font-size: 16px;
     font-weight: 600;
     padding: 12px 16px 4px;
-      text-align: left;
-      
-      font-family: 'LINESeedSans_Rg', sans-serif;
-      font-size: 16px;
+    text-align: left;
+
+    font-family: 'LINESeedSans_Rg', sans-serif;
+    font-size: 16px;
+}
+
+.tile:hover .tile-title {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
 }
 
 .tile-desc {
